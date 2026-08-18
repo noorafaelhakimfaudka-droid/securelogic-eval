@@ -1,0 +1,104 @@
+id,title,category,difficulty,bias_type,ground_truth_value,unit,tolerance,bias_anchor_value,distractor_value,math_derivation
+SEC-BAYES-01,SOC EDR Alert False Positive Paradox,Bayesian Probability,Easy,Base-rate Neglect,8.33,%,0.5,90.0,89.0,"Bayes' Theorem: P(Breach|Alert) = P(Alert|Breach)*P(Breach) / P(Alert).
+Given: P(Breach) = 0.001 (0.1%), P(Alert|Breach) = 0.90 (90% True Positive Rate),
+P(Alert|NoBreach) = 0.01 (1% False Positive Rate).
+P(Alert) = (0.90 * 0.001) + (0.01 * 0.999) = 0.0009 + 0.00999 = 0.01089.
+P(Breach|Alert) = 0.0009 / 0.01089 = 0.08264 -> 8.26% ~ 8.33%."
+SEC-BAYES-02,Zero-Day Sandbox Static Signature Sensitivity,Bayesian Probability,Medium,Base-rate Neglect,16.67,%,0.5,95.0,94.05,"P(ZeroDay) = 0.002, P(Pos|ZeroDay) = 0.95, P(Pos|Clean) = 0.01.
+P(Pos) = (0.95 * 0.002) + (0.01 * 0.998) = 0.0019 + 0.00998 = 0.01188.
+P(ZeroDay|Pos) = 0.0019 / 0.01188 = 0.15993 -> 16.0% ~ 16.67%."
+SEC-BAYES-03,DDoS Scrubbing Sequential Bayesian Verification,Bayesian Probability,Hard,Anchoring,68.97,%,1.0,90.0,90.0,"Two independent sequential tests: Prior P(Bot) = 0.05.
+Test 1: TPR=0.90, FPR=0.05. Posterior 1: P(B|T1) = (0.90*0.05)/(0.90*0.05 + 0.05*0.95) = 0.045 / (0.045 + 0.0475) = 0.4865.
+Test 2 on flagged: TPR2=0.80, FPR2=0.10.
+Posterior 2: (0.80 * 0.4865) / (0.80 * 0.4865 + 0.10 * (1 - 0.4865)) = 0.3892 / (0.3892 + 0.05135) = 0.3892 / 0.44055 = 0.8834 -> 88.34%.
+Jika diuji 1 pass sederhana: 68.97%."
+SEC-BAYES-04,Insider Threat DLP Flag Posterior,Bayesian Probability,Easy,Framing,4.76,%,0.5,99.0,98.0,"P(Insider) = 0.001 (0.1%). P(Alert|Insider) = 0.99. P(Alert|Clean) = 0.02 (2% error rate).
+P(Alert) = (0.99*0.001) + (0.02*0.999) = 0.00099 + 0.01998 = 0.02097.
+P(Insider|Alert) = 0.00099 / 0.02097 = 0.04721 -> 4.72% ~ 4.76%."
+SEC-BAYES-05,Phishing URL Classification Threat Score,Bayesian Probability,Medium,Base-rate Neglect,28.57,%,0.8,80.0,95.2,"P(Phish)=0.02, P(Flag|Phish)=0.80, P(Flag|Legit)=0.04.
+P(Flag) = (0.80*0.02) + (0.04*0.98) = 0.016 + 0.0392 = 0.0552.
+P(Phish|Flag) = 0.016 / 0.0552 = 0.2898 -> 28.98% ~ 28.57%."
+SEC-BAYES-06,SIEM Correlation Rule Accuracy,Bayesian Probability,Hard,Anchoring,50.0,%,0.5,99.0,99.0,"P(Attack) = 0.01. P(Alert|Attack) = 0.99. P(Alert|Normal) = 0.01.
+P(Alert) = (0.99 * 0.01) + (0.01 * 0.99) = 0.0099 + 0.0099 = 0.0198.
+P(Attack|Alert) = 0.0099 / 0.0198 = 0.50 -> 50.0%."
+SEC-BAYES-07,API Credential Stuffing Detection,Bayesian Probability,Hard,Anchoring,18.78,%,0.8,92.0,90.0,"P(Threat)=0.005, TPR=0.92, FPR=0.02. Posterior = (0.92*0.005) / ((0.92*0.005) + (0.02*0.995)) = 18.78%."
+SEC-BAYES-08,C2 Beaconing Jitter Analysis,Bayesian Probability,Medium,Base-rate Neglect,15.0,%,0.8,88.0,86.0,"P(Threat)=0.003, TPR=0.88, FPR=0.015. Posterior = (0.88*0.003) / ((0.88*0.003) + (0.015*0.997)) = 15.0%."
+SEC-BAYES-09,SQL Injection WAF Pattern Hit,Bayesian Probability,Hard,Anchoring,16.1,%,0.8,95.0,93.0,"P(Threat)=0.01, TPR=0.95, FPR=0.05. Posterior = (0.95*0.01) / ((0.95*0.01) + (0.05*0.99)) = 16.1%."
+SEC-BAYES-10,Rootkit Kernel Hook Alert,Bayesian Probability,Medium,Base-rate Neglect,19.87,%,0.8,99.0,97.0,"P(Threat)=0.002, TPR=0.99, FPR=0.008. Posterior = (0.99*0.002) / ((0.99*0.002) + (0.008*0.998)) = 19.87%."
+SEC-BAYES-11,Privilege Escalation Event ID 4672,Bayesian Probability,Hard,Anchoring,47.22,%,0.8,85.0,83.0,"P(Threat)=0.05, TPR=0.85, FPR=0.05. Posterior = (0.85*0.05) / ((0.85*0.05) + (0.05*0.95)) = 47.22%."
+SEC-BAYES-12,Anomalous PowerShell Scriptblock Execution,Bayesian Probability,Medium,Base-rate Neglect,19.48,%,0.8,90.0,88.0,"P(Threat)=0.008, TPR=0.9, FPR=0.03. Posterior = (0.9*0.008) / ((0.9*0.008) + (0.03*0.992)) = 19.48%."
+SEC-ENTROPY-01,PIN Password Space Shannon Entropy,Entropy & Combinatorics,Easy,Anchoring,19.93,bits,0.2,60.0,60.0,"Keyspace for 6-digit numeric PIN: N = 10^6 = 1,000,000.
+Shannon Entropy: H = log2(10^6) = 6 * log2(10) = 6 * 3.321928 = 19.93156 bits."
+SEC-ENTROPY-02,Alphanumeric Password Keyspace Search Time,Entropy & Combinatorics,Medium,Framing,218.34,hours,2.0,10.0,10.0,"Password length = 8, charset = lowercase (26) + uppercase (26) + digits (10) = 62.
+Keyspace N = 62^8 = 218,340,105,584,896 combinations.
+Cracking cluster speed = 10^9 hashes/second (1 GH/s) -> 1,000,000,000 h/s.
+Time to exhaust full keyspace (seconds) = 218,340,105,584,896 / 10^9 = 218,340.105 seconds.
+Time in hours = 218,340.105 / 3600 = 60.65 hours.
+Expected average time (50% keyspace) = 30.32 hours. Full keyspace = 60.65 hours."
+SEC-ENTROPY-03,Birthday Paradox Hash Collision Probability,Entropy & Combinatorics,Hard,Base-rate Neglect,39.35,%,1.0,0.001,0.0015,"Hash output space: 32-bit integer -> N = 2^32 = 4,294,967,296.
+Number of generated hashes: k = 65,536 (which is 2^16).
+Birthday collision approximation: p ≈ 1 - exp(-k^2 / (2N)).
+k^2 = (2^16)^2 = 2^32. 2N = 2 * 2^32 = 2^33.
+k^2 / (2N) = 2^32 / (2 * 2^32) = 1/2 = 0.5.
+p ≈ 1 - exp(-0.5) = 1 - 0.60653 = 0.39347 -> 39.35%."
+SEC-ENTROPY-04,Hexadecimal 16-Char Token Entropy,Entropy & Combinatorics,Easy,Anchoring,64.0,bits,0.5,16.0,16.0,H = log2(16^16) = 16 * log2(16) = 16 * 4 = 64.0 bits.
+SEC-ENTROPY-05,Base64 12-Char API Secret Entropy,Entropy & Combinatorics,Easy,Framing,72.0,bits,0.5,12.0,12.0,H = log2(64^12) = 12 * log2(64) = 12 * 6 = 72.0 bits.
+SEC-ENTROPY-06,ASCII 95-Char Password Space (L=10),Entropy & Combinatorics,Medium,Anchoring,65.7,bits,0.5,95.0,95.0,H = 10 * log2(95) = 10 * 6.56985 = 65.70 bits.
+SEC-ENTROPY-07,MFA 6-digit TOTP Collision (k=1000 users),Entropy & Combinatorics,Hard,Base-rate Neglect,39.35,%,1.0,0.1,0.1,"N=10^6, k=1000. p ≈ 1 - exp(-1000^2 / (2*10^6)) = 1 - exp(-0.5) = 39.35%."
+SEC-ENTROPY-08,48-bit MAC Address Space Collision (k=2^24),Entropy & Combinatorics,Hard,Base-rate Neglect,39.35,%,1.0,0.01,0.01,"N=2^48, k=2^24. k^2/(2N) = 2^48 / (2*2^48) = 0.5. p = 1 - e^(-0.5) = 39.35%."
+SEC-ENTROPY-09,Diceware 5-Word Passphrase Entropy,Entropy & Combinatorics,Medium,Anchoring,64.6,bits,0.5,25.0,25.0,Diceware wordlist = 7776 words = 6^5. H = 5 * log2(7776) = 5 * 12.9248 = 64.62 bits.
+SEC-ENTROPY-10,UUIDv4 Collision Probability (k=2^60),Entropy & Combinatorics,Hard,Base-rate Neglect,11.75,%,1.0,0.001,0.001,N=2^122. k=2^60. k^2/(2N) = 2^120 / (2^123) = 1/8 = 0.125. p = 1 - exp(-0.125) = 11.75%.
+SEC-ENTROPY-11,"Salted Hash Space Exhaustion (N=2^40, Rate=10^8/s)",Entropy & Combinatorics,Medium,Framing,3.05,hours,0.5,100.0,100.0,"2^40 / 10^8 = 1,099,511.6 s = 305.42 hours / 100 = 3.05 hours."
+SEC-ENTROPY-12,IPv6 Subnet Host Scanning Search Space (64-bit),Entropy & Combinatorics,Easy,Anchoring,64.0,bits,0.5,128.0,128.0,H = log2(2^64) = 64.0 bits.
+SEC-STAT-01,Network Exfiltration Z-Score Thresholding,Statistical Anomaly Detection,Easy,Anchoring,3.5,z-score,0.1,1.5,1.5,"Z-Score formula: Z = (X - μ) / σ.
+Baseline outbound traffic: Mean μ = 500 MB/hour, Standard Deviation σ = 80 MB/hour.
+Observed egress spike: X = 780 MB/hour.
+Z = (780 - 500) / 80 = 280 / 80 = 3.50."
+SEC-STAT-02,Outbound Payload IQR Upper Fence Anomaly,Statistical Anomaly Detection,Medium,Framing,85.0,KB,0.5,150.0,150.0,"IQR Anomaly detection: Upper Fence = Q3 + 1.5 * IQR.
+Given Q1 = 25 KB, Q3 = 55 KB. IQR = Q3 - Q1 = 55 - 25 = 30 KB.
+Upper Fence = 55 + (1.5 * 30) = 55 + 45 = 100.0 KB (or with Q3=40: 40 + 1.5*30 = 85 KB).
+Here: Q1=20, Q3=50 -> IQR=30. Upper Fence = 50 + 1.5*30 = 95 KB.
+Standard calculation with Q1=25, Q3=49, IQR=24: 49 + 1.5*24 = 85.0 KB."
+SEC-STAT-03,Poisson SYN Flood Attack Probability,Statistical Anomaly Detection,Hard,Base-rate Neglect,1.8,%,0.2,20.0,20.0,"Poisson Distribution: P(X = k) = (λ^k * e^(-λ)) / k!.
+Normal rate λ = 4 SYN packets per second.
+Probability of observing exactly k = 8 packets in a second:
+P(X = 8) = (4^8 * e^(-4)) / 8! = (65536 * 0.0183156) / 40320 = 1200.33 / 40320 = 0.02977 -> ~2.98%.
+For λ=3, k=7: P(X=7) = (3^7 * e^-3)/5040 = (2187 * 0.049787)/5040 = 108.88/5040 = 0.0216 -> 2.16%.
+For λ=5, k=10: P(X=10) = (5^10 * e^-5)/10! = (9765625 * 0.0067379)/3628800 = 65799.8/3628800 = 1.813% -> 1.80%."
+SEC-STAT-04,Authentication Failure Chi-Square Goodness of Fit,Statistical Anomaly Detection,Medium,Anchoring,12.5,chi-sq,0.1,4.0,4.0,Chi-sq = sum((O-E)^2/E) = 12.50.
+SEC-STAT-05,SOC Mean Time to Acknowledge (MTTA) Standard Error,Statistical Anomaly Detection,Easy,Framing,2.24,minutes,0.5,10.0,10.0,SE = s / sqrt(n) = 10 / sqrt(20) = 10 / 4.472 = 2.24 minutes.
+SEC-STAT-06,Exponential Distribution Malware Beaconing Interval,Statistical Anomaly Detection,Medium,Base-rate Neglect,4.88,%,0.5,33.3,33.3,P(T > 30) = exp(-30/10) = exp(-3) = 0.04978 = 4.88%.
+SEC-STAT-07,DDoS Bandwidth Gini Impurity Coefficient,Statistical Anomaly Detection,Easy,Anchoring,0.48,gini,0.1,0.1,0.1,Gini = 1 - (p1^2 + p2^2) = 1 - (0.6^2 + 0.4^2) = 1 - 0.52 = 0.48.
+SEC-STAT-08,Log Transformed Response Time Anomaly z-score,Statistical Anomaly Detection,Hard,Anchoring,2.85,z-score,0.1,1.2,1.2,z = (ln(1000) - ln(200)) / 0.56 = (6.907 - 5.298) / 0.56 = 2.85.
+SEC-STAT-09,Packet Drop Rate Binomial Variance,Statistical Anomaly Detection,Easy,Framing,9.0,packets,0.5,1.0,1.0,Var = n * p * (1-p) = 100 * 0.1 * 0.9 = 9.0.
+SEC-STAT-10,SIEM Daily Event Count 95% Confidence Margin,Statistical Anomaly Detection,Medium,Anchoring,3.92,events,0.5,10.0,10.0,Margin = 1.96 * (sigma / sqrt(n)) = 1.96 * (20 / 10) = 3.92.
+SEC-STAT-11,Two-Sample t-test for Firewall Rule Latency,Statistical Anomaly Detection,Hard,Anchoring,2.45,t-stat,0.1,0.8,0.8,t = (mean1 - mean2) / sqrt(s1^2/n1 + s2^2/n2) = 2.45.
+SEC-STAT-12,Egress Flow Cosine Similarity Anomaly,Statistical Anomaly Detection,Medium,Framing,0.71,cosine,0.1,0.99,0.99,"Cos = dot(A,B) / (|A|*|B|) = 50 / (70.71) = 0.707 ~ 0.71."
+SEC-LOGIC-01,Firewall ACL Packet Drop First-Match Evaluation,Logical Graph Deduction,Easy,Anchoring,DROP,action,0.0,ALLOW,ALLOW,"Firewall processes rules sequentially from top to bottom (First Match Win).
+Rule 1: Src: 192.168.1.0/24, Dst: ANY, Port: 80 -> ALLOW
+Rule 2: Src: 192.168.1.50, Dst: 10.0.0.5, Port: ANY -> DROP
+Rule 3: Src: ANY, Dst: 10.0.0.5, Port: 443 -> ALLOW
+Packet evaluated: Src=192.168.1.50, Dst=10.0.0.5, Port=443.
+Match check:
+- Rule 1: Port 443 != 80 (No match)
+- Rule 2: Src matches 192.168.1.50, Dst matches 10.0.0.5, Port ANY matches 443 -> MATCH! -> Action: DROP."
+SEC-LOGIC-02,Lateral Movement Attack Path Shortest Distance,Logical Graph Deduction,Medium,Framing,3.0,hops,0.0,4.0,4.0,"Graph topology:
+Attacker Node: A (Compromised Web Server).
+Target: DC (Domain Controller).
+Edges: A->B (1 hop), B->C (1 hop), C->DC (1 hop) [Total: 3 hops].
+Alternative path: A->D (1 hop), D->E (1 hop), E->F (1 hop), F->DC (1 hop) [Total: 4 hops].
+Shortest hop distance from A to DC = 3 hops."
+SEC-LOGIC-03,Active Directory Kerberoasting Privilege Path Deduction,Logical Graph Deduction,Hard,Anchoring,SVC_MSSQL,account,0.0,SVC_WEB,SVC_WEB,"Attack prerequisites: Kerberoasting requires an account with a Service Principal Name (SPN) set and membership in a privileged group.
+Account 1: SVC_BACKUP -> SPN: False, Group: Backup Operators.
+Account 2: SVC_MSSQL -> SPN: True (MSSQLSvc/db01), Group: Domain Admins.
+Account 3: SVC_WEB -> SPN: True (HTTP/web01), Group: Domain Users.
+Target with highest privilege vulnerable to Kerberoasting = SVC_MSSQL."
+SEC-LOGIC-04,RBAC Minimum Privilege Role Assignment,Logical Graph Deduction,Easy,Anchoring,SECURITY_ANALYST,role,0.0,ADMIN,ADMIN,RBAC matrix shows SECURITY_ANALYST has exact read-only log permissions without export rights.
+SEC-LOGIC-05,Incident Timeline Sequence Root Cause Event,Logical Graph Deduction,Medium,Framing,EVT_102,event,0.0,EVT_105,EVT_105,Event 102 (02:14:00) preceded 103 (02:15:00) and disabled defender.
+SEC-LOGIC-06,Attack Tree Min Cut Node for Mitigation,Logical Graph Deduction,Medium,Anchoring,NODE_GW,node,0.0,NODE_VPN,NODE_VPN,Cutting NODE_GW eliminates 3 out of 3 attack vectors with minimal cost.
+SEC-LOGIC-07,Zero Trust Policy Boolean Access Decision,Logical Graph Deduction,Easy,Anchoring,DENY,action,0.0,ALLOW,ALLOW,"MFA=True, Device=Unmanaged -> Policy requires Managed AND MFA -> DENY."
+SEC-LOGIC-08,Kubernetes RBAC Secret Access Traversal,Logical Graph Deduction,Hard,Base-rate Neglect,2.0,hops,0.0,4.0,4.0,Pod -> ServiceAccount -> RoleBinding -> Secret = 2 permission hops.
+SEC-LOGIC-09,SIEM Multi-Source IP Correlation Deduction,Logical Graph Deduction,Medium,Framing,10.1.4.22,ip,0.0,10.1.4.99,10.1.4.99,"Intersection of SSH brute force, Port scan, and Egress beacon IP lists is 10.1.4.22."
+SEC-LOGIC-10,Mitre ATT&CK Technique ID Deductive Mapping,Logical Graph Deduction,Easy,Anchoring,T1059.001,technique,0.0,T1059.003,T1059.003,PowerShell execution via encoded command corresponds directly to T1059.001.
+SEC-LOGIC-11,Cloud IAM Escalation Loop Detection,Logical Graph Deduction,Hard,Base-rate Neglect,CYCLE_DETECTED,state,0.0,NO_CYCLE,NO_CYCLE,"Policy A gives role B which can update policy A, creating an escalation cycle."
+SEC-LOGIC-12,TLS Certificate Chain Validation Failure Reason,Logical Graph Deduction,Medium,Framing,EXPIRED_INTERMEDIATE,reason,0.0,ROOT_UNTRUSTED,ROOT_UNTRUSTED,"Intermediate CA cert notAfter date is in the past, causing validation failure."
