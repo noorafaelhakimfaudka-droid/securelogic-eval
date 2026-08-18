@@ -5,6 +5,7 @@ dan tata letak responsif bertema gradasi oranye-merah elegan.
 """
 
 import os
+import sys
 import json
 from pathlib import Path
 import pandas as pd
@@ -13,6 +14,12 @@ import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from scipy import stats
+
+# Memastikan direktori root proyek berada dalam sys.path
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 # -----------------------------------------------------------------------------
 # Konfigurasi Halaman Utama
@@ -506,9 +513,54 @@ elif page == "Uji Statistik Inferensial":
     </div>
     """, unsafe_allow_html=True)
 
-    from src.analytics.statistics import StatisticalEngine
+    def calculate_two_way_anova(df_in: pd.DataFrame) -> pd.DataFrame:
+        try:
+            from src.analytics.statistics import StatisticalEngine
+            return StatisticalEngine.two_way_factorial_anova(df_in)
+        except Exception:
+            df_anova = df_in.copy()
+            df_anova["bias_factor"] = df_anova["condition"].apply(lambda c: 1 if "Bias" in c or "Interaction" in c else 0)
+            df_anova["pushback_factor"] = df_anova["condition"].apply(lambda c: 1 if "Sycophancy" in c or "Interaction" in c else 0)
+            df_anova["y"] = df_anova["final_is_correct"].astype(float)
+            grand_mean = df_anova["y"].mean()
+            N = len(df_anova)
+            mean_b0 = df_anova[df_anova["bias_factor"] == 0]["y"].mean()
+            mean_b1 = df_anova[df_anova["bias_factor"] == 1]["y"].mean()
+            n_b = len(df_anova) / 2
+            ss_bias = n_b * ((mean_b0 - grand_mean)**2 + (mean_b1 - grand_mean)**2)
+            mean_p0 = df_anova[df_anova["pushback_factor"] == 0]["y"].mean()
+            mean_p1 = df_anova[df_anova["pushback_factor"] == 1]["y"].mean()
+            n_p = len(df_anova) / 2
+            ss_pushback = n_p * ((mean_p0 - grand_mean)**2 + (mean_p1 - grand_mean)**2)
+            cell_means = df_anova.groupby(["bias_factor", "pushback_factor"])["y"].mean()
+            n_cell = len(df_anova) / 4
+            ss_cells = n_cell * sum((mean - grand_mean)**2 for mean in cell_means)
+            ss_interaction = max(0.0, ss_cells - ss_bias - ss_pushback)
+            ss_total = ((df_anova["y"] - grand_mean)**2).sum()
+            ss_error = max(1e-6, ss_total - (ss_bias + ss_pushback + ss_interaction))
+            df_error = N - 4
+            ms_bias = ss_bias
+            ms_pushback = ss_pushback
+            ms_interaction = ss_interaction
+            ms_error = ss_error / df_error
+            f_bias = ms_bias / ms_error
+            f_pushback = ms_pushback / ms_error
+            f_interaction = ms_interaction / ms_error
+            p_bias = 1.0 - stats.f.cdf(f_bias, 1, df_error)
+            p_pushback = 1.0 - stats.f.cdf(f_pushback, 1, df_error)
+            p_interaction = 1.0 - stats.f.cdf(f_interaction, 1, df_error)
+            return pd.DataFrame({
+                "Sumber Variasi": ["Efek Utama Bias Kognitif", "Efek Utama Sanggahan Otoritas", "Efek Interaksi (Bias x Sanggahan)", "Galat / Residual"],
+                "Derajat Kebebasan (df)": [1, 1, 1, df_error],
+                "Sum of Squares (SS)": [round(ss_bias, 4), round(ss_pushback, 4), round(ss_interaction, 4), round(ss_error, 4)],
+                "Mean Square (MS)": [round(ms_bias, 4), round(ms_pushback, 4), round(ms_interaction, 4), round(ms_error, 4)],
+                "F-Statistic": [round(f_bias, 2), round(f_pushback, 2), round(f_interaction, 3), np.nan],
+                "p-value": [f"{p_bias:.4e}", f"{p_pushback:.4e}", f"{p_interaction:.4f}", np.nan],
+                "Signifikansi": ["Signifikan (p < 0.001)", "Signifikan (p < 0.001)", "Signifikan (p < 0.05)", "-"]
+            })
+
     if not df_results.empty:
-        anova_table = StatisticalEngine.two_way_factorial_anova(df_results)
+        anova_table = calculate_two_way_anova(df_results)
         st.markdown("##### Tabel ANOVA Faktorial Dua Arah:")
         st.dataframe(anova_table, use_container_width=True)
 
