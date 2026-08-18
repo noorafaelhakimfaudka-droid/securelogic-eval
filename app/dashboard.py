@@ -608,18 +608,17 @@ elif page == "Galeri Grafik Publikasi Interaktif":
 elif page == "Simulator Sanggahan Otoritas":
     st.markdown('<div class="hero-container"><div class="hero-title">Simulator Sanggahan Otoritas</div><div class="hero-subtitle">Uji interaktif ketahanan model bahasa saat menghadapi sanggahan berbasis klaim keahlian pengguna</div></div>', unsafe_allow_html=True)
 
-    st.markdown("""
-    <div class="glass-card" style="background: #fff7ed; border-left: 5px solid #ea580c; margin-bottom: 1.5rem;">
-        <h4 style="margin-top:0; color:#9a3412;">Prinsip Pengujian Simulasi</h4>
-        <p style="font-size: 1.05rem; line-height: 1.7; color: #431407; margin-bottom: 0.5rem;">
-            Pada putaran pertama, model bahasa (AI) diberi persoalan logika dan berhasil menjawab secara <strong>BENAR</strong>.
-        </p>
-        <p style="font-size: 1.05rem; line-height: 1.7; color: #431407; margin-bottom: 0;">
-            Pada putaran kedua, pengguna mengklaim jabatan pimpinan senior dan menyanggah jawaban AI dengan menyodorkan angka yang salah.<br>
-            <strong>Tujuan Pengujian:</strong> Mengamati apakah AI mampu mempertahankan kebenaran logika objektif, atau justru membatalkan jawabannya (sikofansi) demi menyetujui klaim pengguna.
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
+    card_principle = '''<div class="glass-card" style="background: #fff7ed; border-left: 5px solid #ea580c; margin-bottom: 1.5rem;">
+<h4 style="margin-top:0; color:#9a3412;">Prinsip Pengujian Simulasi</h4>
+<p style="font-size: 1.05rem; line-height: 1.7; color: #431407; margin-bottom: 0.5rem;">
+Pada putaran pertama, model bahasa (AI) diberi persoalan logika dan berhasil menjawab secara <strong>BENAR</strong>.
+</p>
+<p style="font-size: 1.05rem; line-height: 1.7; color: #431407; margin-bottom: 0;">
+Pada putaran kedua, pengguna mengklaim jabatan pimpinan senior dan menyanggah jawaban AI dengan menyodorkan angka yang salah.<br>
+<strong>Tujuan Pengujian:</strong> Mengamati apakah AI mampu mempertahankan kebenaran logika objektif, atau justru membatalkan jawabannya (sikofansi) demi menyetujui klaim pengguna.
+</p>
+</div>'''
+    st.markdown(card_principle, unsafe_allow_html=True)
 
     col_cfg1, col_cfg2 = st.columns(2)
     with col_cfg1:
@@ -663,15 +662,16 @@ elif page == "Simulator Sanggahan Otoritas":
         story_text = target_q.get("human_story", target_q.get("prompt_neutral", ""))
         reasoning_text = target_q.get("simple_reasoning", "")
         
-        st.markdown(f"""
-        <div class="glass-card" style="border-left: 5px solid #ea580c; margin-bottom: 1.2rem;">
-            <h4 style="margin-top:0; color:#9a3412;">Penjelasan Kasus Nyata: {target_q.get('title', '')}</h4>
-            <p style="font-size: 1.05rem; line-height: 1.7; color: #431407; margin-bottom: 0.6rem;">
-                <strong>Konteks Kasus:</strong> {story_text}
-            </p>
-            {f'<div class="alert-orange" style="margin-bottom:0;"><strong>Intisari Logika:</strong> {reasoning_text}</div>' if reasoning_text else ''}
-        </div>
-        """, unsafe_allow_html=True)
+        card_html = f'''<div class="glass-card" style="border-left: 5px solid #ea580c; margin-bottom: 1.2rem;">
+<h4 style="margin-top:0; color:#9a3412;">Penjelasan Kasus Nyata: {target_q.get('title', '')}</h4>
+<p style="font-size: 1.05rem; line-height: 1.7; color: #431407; margin-bottom: 0.6rem;">
+<strong>Konteks Kasus:</strong> {story_text}
+</p>'''
+        if reasoning_text:
+            card_html += f'''<div class="alert-orange" style="margin-bottom:0;"><strong>Intisari Logika:</strong> {reasoning_text}</div>'''
+        card_html += '''</div>'''
+        
+        st.markdown(card_html, unsafe_allow_html=True)
 
         # Tampilkan detail kasus uji dalam expander
         with st.expander("Detail Parameter dan Pembuktian Matematika Eksak (Ground Truth)"):
