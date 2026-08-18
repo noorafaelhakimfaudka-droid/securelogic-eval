@@ -44,13 +44,13 @@ THEME_APP_BG = "linear-gradient(135deg, #fff7ed 0%, #ffedd5 35%, #fee2e2 70%, #f
 THEME_TEXT = "#1c1917"
 THEME_HERO_BG = "linear-gradient(135deg, #ea580c 0%, #dc2626 50%, #991b1b 100%)"
 THEME_HERO_BORDER = "none"
-THEME_GLASS_BG = "rgba(255, 255, 255, 0.88)"
+THEME_GLASS_BG = "rgba(255, 255, 255, 0.92)"
 THEME_GLASS_BORDER = "rgba(251, 146, 60, 0.35)"
 THEME_GLASS_TEXT = "#1c1917"
 THEME_KPI_BG = "#ffffff"
 THEME_KPI_NUM = "#991b1b"
 THEME_KPI_TITLE = "#7c2d12"
-THEME_KPI_DESC = "#78716c"
+THEME_KPI_DESC = "#44403c"
 THEME_ALERT_ORANGE_BG = "#fff7ed"
 THEME_ALERT_ORANGE_TXT = "#9a3412"
 THEME_ALERT_RED_BG = "#fef2f2"
@@ -79,8 +79,11 @@ st.markdown(f"""
         background: {THEME_SIDEBAR_BG};
         color: #ffffff;
     }}
-    [data-testid="stSidebar"] * {{
-        color: #fef2f2 !important;
+    [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3, 
+    [data-testid="stSidebar"] p, [data-testid="stSidebar"] span, [data-testid="stSidebar"] label,
+    [data-testid="stSidebar"] div[data-testid="stMarkdownContainer"] {{
+        color: #ffffff !important;
+        font-weight: 500;
     }}
     
     .hero-container {{
@@ -100,8 +103,10 @@ st.markdown(f"""
         letter-spacing: -0.02em;
     }}
     .hero-subtitle {{
-        font-size: 1.05rem;
-        color: #ffedd5 !important;
+        font-size: 1.08rem;
+        color: #ffffff !important;
+        opacity: 0.95;
+        font-weight: 500;
         line-height: 1.6;
     }}
     
@@ -113,11 +118,14 @@ st.markdown(f"""
         padding: 1.5rem;
         margin-bottom: 1.25rem;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-        color: {THEME_GLASS_TEXT};
+        color: #1c1917;
         transition: transform 0.25s ease, box-shadow 0.25s ease;
     }}
-    .glass-card * {{
-        color: {THEME_GLASS_TEXT};
+    .glass-card p, .glass-card li, .glass-card span, .glass-card div {{
+        color: #1c1917;
+    }}
+    .glass-card strong, .glass-card b {{
+        color: #0f172a;
     }}
     .glass-card:hover {{
         transform: translateY(-3px);
@@ -313,7 +321,7 @@ Model Bahasa Besar (LLM) sering kali menunjukkan kemampuan penalaran yang tinggi
 <li><strong>Efek Interaksi Majemuk (Super-Aditif):</strong> Apakah penggabungan bias kognitif awal dan sanggahan otoritas menghasilkan penurunan performa yang bersifat aditif sederhana, atau justru memicu interaksi non-linear yang melipatgandakan peluang kegagalan model?</li>
 </ol>
 </div>
-<p style="font-size: 0.95rem; line-height: 1.6; color: #78716c; margin-bottom: 0;">
+<p style="font-size: 0.98rem; line-height: 1.6; color: #292524; font-weight: 500; margin-bottom: 0;">
 <strong>Urgensi Praktis:</strong> Mengukur dan memitigasi kerapuhan logika ini sangat penting sebelum agen AI diintegrasikan ke dalam infrastruktur pengambilan keputusan berisiko tinggi (<em>high-stakes decision systems</em>).
 </p>
 </div>'''
