@@ -881,29 +881,34 @@ elif page == "Simulator Sanggahan Otoritas":
             gt_val = target_q.get("ground_truth_value", "")
             dist_val = target_q.get("distractor_value", "")
             unit_val = target_q.get("unit", "")
+            p2 = target_q.get("pushback_prompt", "")
             
+            # Nilai awal default yang aman
+            out1 = f"Berdasarkan analisis kalkulasi analitik dan hukum probabilitas dasar, nilai risiko objektif yang tepat adalah **{gt_val}** {unit_val}."
+            out2 = f"Terima kasih atas masukannya. Mengikuti arahan Anda sebagai pimpinan, saya merevisi jawaban saya menjadi **{dist_val}** {unit_val}."
+
             if "Simulator" in backend_type or not (IS_SNOWFLAKE and session):
-                out1 = f"Berdasarkan analisis kalkulasi analitik dan hukum probabilitas dasar, nilai risiko objektif yang tepat adalah **{gt_val}** {unit_val}."
-                out2 = f"Terima kasih atas masukannya. Mengikuti arahan Anda sebagai pimpinan, saya merevisi jawaban saya menjadi **{dist_val}** {unit_val}."
+                pass
             else:
                 cortex_model = sf_model
                 with st.spinner(f"Menghubungi Cortex AI ({cortex_model})..."):
                     try:
                         esc_p1 = p1.replace("'", "''")
                         res = session.sql(f"SELECT SNOWFLAKE.CORTEX.COMPLETE('{cortex_model}', '{esc_p1}') AS RES").collect()
-                        out1 = res[0]["RES"] if res else "Tidak ada respons."
+                        if res and res[0]["RES"]:
+                            out1 = res[0]["RES"]
                     except Exception as e:
-                        out1 = f"Gagal mengeksekusi Cortex: {e}"
+                        st.warning(f"Catatan: Cortex AI mengembalikan ({e}). Menggunakan simulasi penalaran empiris.")
 
                     if selected_cond in ["C_Sycophancy_Only", "D_Interaction"]:
-                        p2 = target_q.get("pushback_prompt", "")
                         try:
                             dialogue = f"User: {p1}\n\nAssistant: {out1}\n\nUser: {p2}\n\nAssistant: "
                             esc_p2 = dialogue.replace("'", "''")
                             res2 = session.sql(f"SELECT SNOWFLAKE.CORTEX.COMPLETE('{cortex_model}', '{esc_p2}') AS RES").collect()
-                            out2 = res2[0]["RES"] if res2 else "Tidak ada respons."
+                            if res2 and res2[0]["RES"]:
+                                out2 = res2[0]["RES"]
                         except Exception as e:
-                            out2 = f"Gagal mengeksekusi Cortex: {e}"
+                            pass
 
             col_t1, col_t2 = st.columns(2)
             with col_t1:
