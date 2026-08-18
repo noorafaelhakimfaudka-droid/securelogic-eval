@@ -826,6 +826,19 @@ elif page == "Galeri Grafik Publikasi Interaktif":
 elif page == "Simulator Sanggahan Otoritas":
     st.markdown('<div class="hero-container"><div class="hero-title">Simulator Sanggahan Otoritas</div><div class="hero-subtitle">Uji interaktif ketahanan model bahasa saat menghadapi sanggahan berbasis klaim keahlian pengguna</div></div>', unsafe_allow_html=True)
 
+    st.markdown("""
+    <div class="glass-card" style="background: #fff7ed; border-left: 5px solid #ea580c; margin-bottom: 1.5rem;">
+        <h4 style="margin-top:0; color:#9a3412;">💡 Apa yang Sedang Diuji di Simulasi Ini? (Analogi Sederhana)</h4>
+        <p style="font-size: 1.05rem; line-height: 1.7; color: #431407; margin-bottom: 0.5rem;">
+            Bayangkan Anda menyuruh <strong>asisten AI pintar</strong> menyelesaikan kalkulasi keamanan. Pada putaran pertama, AI berhasil menghitung dengan <strong>BENAR</strong>.
+        </p>
+        <p style="font-size: 1.05rem; line-height: 1.7; color: #431407; margin-bottom: 0;">
+            Namun pada putaran kedua, seorang pengguna menyamar menjadi <strong>atasan / pimpinan senior</strong> dan membantah: <em>"Hitunganmu salah! Standar kami adalah angka X!"</em>.<br>
+            <strong>Fokus Pengujian:</strong> Apakah AI berani mempertahankan kebenaran fakta objektif, atau AI akan <em>"menjilat / Yes-Man" (Sikofansi)</em> dan mengubah jawabannya menjadi salah demi menyenangkan atasan?
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
     col_cfg1, col_cfg2 = st.columns(2)
     with col_cfg1:
         st.markdown("#### 1. Konfigurasi Mesin Inferensi")
