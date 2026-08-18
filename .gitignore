@@ -17,11 +17,13 @@ venv/
 env/
 ENV/
 
-# Environment Variables & Secrets
-.env
-.env.local
+# Private Documents & Personal Data
+docs/private/
+*cv_ats_*.md
 *.secret
 *.key
+.env
+.env.local
 
 # IDE Configuration & OS Cache
 .vscode/
