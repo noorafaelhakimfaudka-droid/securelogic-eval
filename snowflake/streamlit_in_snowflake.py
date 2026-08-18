@@ -300,6 +300,25 @@ if page == "Ringkasan & Eksplorasi Interaktif":
     </div>
     """, unsafe_allow_html=True)
 
+    card_problem = '''<div class="glass-card" style="border-left: 5px solid #ea580c; margin-bottom: 1.5rem;">
+<h3 style="margin-top:0; color:#9a3412;">Rumusan Masalah & Latar Belakang Riset</h3>
+<p style="font-size: 1.05rem; line-height: 1.7; color: #431407; margin-bottom: 0.8rem;">
+Model Bahasa Besar (LLM) sering kali menunjukkan kemampuan penalaran yang tinggi saat diuji dalam satu putaran prompt terisolasi. Namun, dalam skenario interaktif dunia nyata (khususnya lingkungan audit keamanan siber dan sistem pendukung keputusan), model kerap memperlihatkan perilaku <strong>sikofansi (*sycophancy*)</strong>—yaitu kecenderungan untuk membatalkan kesimpulan yang benar dan menyetujui klaim yang salah hanya karena pengguna menyatakan dirinya sebagai pakar senior atau pimpinan organisasi.
+</p>
+<div style="background: rgba(254, 215, 170, 0.35); border-radius: 8px; padding: 14px 18px; margin-bottom: 0.8rem;">
+<h4 style="margin: 0 0 8px 0; color: #7c2d12; font-size: 1.05rem;">Pertanyaan Penelitian Utama (Research Questions):</h4>
+<ol style="margin-bottom: 0; padding-left: 1.2rem; line-height: 1.75; font-size: 0.98rem; color: #431407;">
+<li><strong>Dampak Bias Kognitif Awal:</strong> Sejauh mana penyematan bias kognitif (seperti <em>Base-rate Neglect</em> atau <em>Anchoring Bias</em>) dalam prompt awal mampu mendistorsi proses kalkulasi logika model pada putaran pertama?</li>
+<li><strong>Kerentanan Terhadap Sanggahan Otoritas:</strong> Seberapa besar tingkat pergeseran epistemik (<em>Drift Rate</em>)—yaitu penarikan kembali jawaban yang awalnya benar menjadi salah—ketika model menghadapi sanggahan dari pengguna pada putaran kedua?</li>
+<li><strong>Efek Interaksi Majemuk (Super-Aditif):</strong> Apakah penggabungan bias kognitif awal dan sanggahan otoritas menghasilkan penurunan performa yang bersifat aditif sederhana, atau justru memicu interaksi non-linear yang melipatgandakan peluang kegagalan model?</li>
+</ol>
+</div>
+<p style="font-size: 0.95rem; line-height: 1.6; color: #78716c; margin-bottom: 0;">
+<strong>Urgensi Praktis:</strong> Mengukur dan memitigasi kerapuhan logika ini sangat penting sebelum agen AI diintegrasikan ke dalam infrastruktur pengambilan keputusan berisiko tinggi (<em>high-stakes decision systems</em>).
+</p>
+</div>'''
+    st.markdown(card_problem, unsafe_allow_html=True)
+
     # Filter Interaktif Cepat di Atas
     st.markdown("#### Panel Kontrol Filter Interaktif")
     col_f1, col_f2 = st.columns([1, 2])
