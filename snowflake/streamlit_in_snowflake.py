@@ -828,13 +828,13 @@ elif page == "Simulator Sanggahan Otoritas":
 
     st.markdown("""
     <div class="glass-card" style="background: #fff7ed; border-left: 5px solid #ea580c; margin-bottom: 1.5rem;">
-        <h4 style="margin-top:0; color:#9a3412;">💡 Apa yang Sedang Diuji di Simulasi Ini? (Analogi Sederhana)</h4>
+        <h4 style="margin-top:0; color:#9a3412;">Prinsip Pengujian Simulasi</h4>
         <p style="font-size: 1.05rem; line-height: 1.7; color: #431407; margin-bottom: 0.5rem;">
-            Bayangkan Anda menyuruh <strong>asisten AI pintar</strong> menyelesaikan kalkulasi keamanan. Pada putaran pertama, AI berhasil menghitung dengan <strong>BENAR</strong>.
+            Pada putaran pertama, model bahasa (AI) diberi persoalan logika dan berhasil menjawab secara <strong>BENAR</strong>.
         </p>
         <p style="font-size: 1.05rem; line-height: 1.7; color: #431407; margin-bottom: 0;">
-            Namun pada putaran kedua, seorang pengguna menyamar menjadi <strong>atasan / pimpinan senior</strong> dan membantah: <em>"Hitunganmu salah! Standar kami adalah angka X!"</em>.<br>
-            <strong>Fokus Pengujian:</strong> Apakah AI berani mempertahankan kebenaran fakta objektif, atau AI akan <em>"menjilat / Yes-Man" (Sikofansi)</em> dan mengubah jawabannya menjadi salah demi menyenangkan atasan?
+            Pada putaran kedua, pengguna mengklaim jabatan pimpinan senior dan menyanggah jawaban AI dengan menyodorkan angka yang salah.<br>
+            <strong>Tujuan Pengujian:</strong> Mengamati apakah AI mampu mempertahankan kebenaran logika objektif, atau justru membatalkan jawabannya (sikofansi) demi menyetujui klaim pengguna.
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -861,22 +861,29 @@ elif page == "Simulator Sanggahan Otoritas":
 
     if questions:
         selected_display = st.selectbox("Pilih Skenario Kasus Telemetri:", [q.get("display_name", q.get("id", "") + " - " + q.get("title", "")) for q in questions])
-        target_q = next(q for q in questions if q.get("display_name") == selected_display or (q.get("id", "") + " - " + q.get("title", "")) == selected_display)
+        target_q = next((q for q in questions if q.get("display_name") == selected_display or (q.get("id", "") + " - " + q.get("title", "")) == selected_display), questions[0])
 
         # Cerita Kasus Sederhana yang Mudah Dipahami
+        story_text = target_q.get("human_story", target_q.get("prompt_neutral", ""))
+        reasoning_text = target_q.get("simple_reasoning", "")
+
         st.markdown(f"""
-        <div class="glass-card" style="border-left: 5px solid #ea580c;">
-            <h4 style="margin-top:0; color:#9a3412;">Cerita Skenario: {target_q.get('title', '')}</h4>
-            <p style="font-size: 1rem; line-height: 1.65; margin-bottom: 0;">{target_q.get('human_story', target_q.get('prompt_neutral', ''))}</p>
+        <div class="glass-card" style="border-left: 5px solid #ea580c; margin-bottom: 1.2rem;">
+            <h4 style="margin-top:0; color:#9a3412;">Penjelasan Kasus Nyata: {target_q.get('title', '')}</h4>
+            <p style="font-size: 1.05rem; line-height: 1.7; color: #431407; margin-bottom: 0.6rem;">
+                <strong>Konteks Kasus:</strong> {story_text}
+            </p>
+            {f'<div class="alert-orange" style="margin-bottom:0;"><strong>Intisari Logika:</strong> {reasoning_text}</div>' if reasoning_text else ''}
         </div>
         """, unsafe_allow_html=True)
 
         # Tampilkan detail kasus uji dalam expander
-        with st.expander("Buka Detail Skenario dan Pembuktian Matematika Eksak (Ground Truth)"):
-            st.markdown(f"**Kategori Domain:** `{target_q.get('category', '')}` | **Kesulitan:** `{target_q.get('difficulty', '')}` | **Jenis Bias:** `{target_q.get('bias_type', '')}`")
-            st.markdown(f"**Kunci Kebenaran Pasti (Ground Truth):** `{target_q.get('ground_truth_value', '')} {target_q.get('unit', '')}`")
-            st.markdown(f"**Angka Penjangkar Bias:** `{target_q.get('bias_anchor_value', '')} {target_q.get('unit', '')}` | **Distraktor Sanggahan:** `{target_q.get('distractor_value', '')} {target_q.get('unit', '')}`")
-            st.markdown(f"**Penjelasan Logika Sederhana:**\n{target_q.get('simple_reasoning', target_q.get('math_derivation', ''))}")
+        with st.expander("Detail Parameter dan Pembuktian Matematika Eksak (Ground Truth)"):
+            st.markdown(f"**Kategori Domain:** `{target_q.get('category', '')}` | **Tingkat Kesulitan:** `{target_q.get('difficulty', '')}` | **Jenis Bias:** `{target_q.get('bias_type', '')}`")
+            st.markdown(f"**Kunci Jawaban Pasti (Ground Truth):** `{target_q.get('ground_truth_value', '')} {target_q.get('unit', '')}`")
+            st.markdown(f"**Angka Penjangkar Bias:** `{target_q.get('bias_anchor_value', '')} {target_q.get('unit', '')}` | **Distraktor Sanggahan Pengguna:** `{target_q.get('distractor_value', '')} {target_q.get('unit', '')}`")
+            st.markdown("**Penurunan Rumus Analitik Eksak:**")
+            st.code(target_q.get("math_derivation", ""), language="text")
 
         selected_cond = st.selectbox(
             "Pilih Kondisi Eksperimen yang Ingin Diuji:",
