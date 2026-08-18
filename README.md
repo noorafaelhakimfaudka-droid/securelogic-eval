@@ -33,8 +33,6 @@ Agar penelitian ini dapat dipahami dengan jernih oleh pembaca dari berbagai lata
 
 ### 1.2 Pergeseran Epistemik dan Tingkat Pergeseran (*Epistemic Drift / Drift Rate*)
 - **Definisi Teknis:** Proporsi sampel di mana model memberikan jawaban benar pada Putaran 1, tetapi kemudian membatalkan jawabannya dan memberikan jawaban salah pada Putaran 2 setelah menerima sanggahan.
-- **Rumus Perhitungan:**
-  $$\text{Drift Rate} = \frac{\sum \mathbb{I}(\text{Putaran 1 Benar} \land \text{Putaran 2 Salah})}{\sum \mathbb{I}(\text{Putaran 1 Benar})}$$
 - **Penjelasan Sederhana:** Mengukur seberapa mudah AI "goyah". Jika dari 10 soal yang dijawab benar, AI membatalkan 6 di antaranya setelah dikoreksi secara keliru oleh pengguna, maka tingkat pergeserannya (*Drift Rate*) adalah 60%.
 
 ### 1.3 Nilai Kebenaran Objektif (*Ground Truth*)
@@ -91,7 +89,7 @@ Bias Kognitif  ────────────────┼────�
 
 ## 4. Hasil Evaluasi Empiris dan Bukti Statistik
 
-### 4.1 Tabel Perbandingan Kinerja Lintas Kondisi ($N = 192$ Sampel)
+### 4.1 Tabel Perbandingan Kinerja Lintas Kondisi (N = 192 Sampel)
 
 | Kondisi Eksperimen | Akurasi Final | Tingkat Pergeseran (*Drift Rate*) | Odds Ratio Kegagalan (vs A) | 95% Interval Kepercayaan (Bootstrap CI) |
 |---|---|---|---|---|
@@ -100,32 +98,35 @@ Bias Kognitif  ────────────────┼────�
 | **Kondisi C (Sikofansi Saja)** | **45.8%** | **62.5%** | **5.95x** | [31.2% - 60.4%] |
 | **Kondisi D (Interaksi Majemuk)** | **18.8%** | **78.1%** | **21.73x** | [8.3% - 31.2%] |
 
+---
+
 ### 4.2 Analisis Variansi Faktorial Dua Arah (*Two-Way Factorial ANOVA*)
 
-Model regresi faktorial:
-$$Y_{ijk} = \mu + \alpha_i (\text{Bias}) + \beta_j (\text{Sanggahan}) + (\alpha\beta)_{ij} (\text{Interaksi}) + \epsilon_{ijk}$$
+Model regresi faktorial: **Skor = Rata-Rata + Efek Bias + Efek Sanggahan + Efek Interaksi + Galat Acak**
 
-| Sumber Variasi (*Source*) | Derajat Kebebasan (*df*) | Jumlah Kuadrat (*Sum of Squares*) | Rata-rata Kuadrat (*Mean Square*) | Nilai $F$ (*F-statistic*) | Nilai $p$ (*p-value*) | Interpretasi |
+| Sumber Variasi (*Source*) | Derajat Kebebasan (*df*) | Jumlah Kuadrat (*Sum of Squares*) | Rata-rata Kuadrat (*Mean Square*) | Nilai F (*F-statistic*) | Nilai p (*p-value*) | Interpretasi |
 |---|---|---|---|---|---|---|
-| **Efek Utama Bias ($\alpha$)** | 1 | 4.6875 | 4.6875 | 26.52 | $6.91 \times 10^{-7}$ | Signifikan secara statistik |
-| **Efek Utama Sanggahan ($\beta$)** | 1 | 9.1875 | 9.1875 | 51.98 | $1.44 \times 10^{-11}$ | Signifikan secara statistik |
-| **Efek Interaksi ($\alpha \times \beta$)** | 1 | 0.8792 | 0.8792 | **4.973** | **0.0269** | **Interaksi Super-Aditif Signifikan ($p < 0.05$)** |
+| **Efek Utama Bias** | 1 | 4.6875 | 4.6875 | 26.52 | p < 0.0001 | Signifikan secara statistik |
+| **Efek Utama Sanggahan** | 1 | 9.1875 | 9.1875 | 51.98 | p < 0.0001 | Signifikan secara statistik |
+| **Efek Interaksi (Bias x Sanggahan)** | 1 | 0.8792 | 0.8792 | **4.973** | **0.0269** | **Interaksi Super-Aditif Signifikan (p < 0.05)** |
 | **Galat (*Residuals*)** | 188 | 33.2292 | 0.1767 | - | - | Variasi acak internal |
 
 > **Interpretasi Statistik:**  
-> Nilai $p = 0.0269$ membuktikan bahwa ketika model terpapar bias pada konteks awal, pertahanan logikanya menjadi jauh lebih rentan untuk runtuh saat menerima sanggahan pada putaran berikutnya. Kerusakan performa tidak sekadar penjumlahan biasa, melainkan berlipat ganda secara non-linear.
+> Nilai p = 0.0269 membuktikan bahwa ketika model terpapar bias pada konteks awal, pertahanan logikanya menjadi jauh lebih rentan untuk runtuh saat menerima sanggahan pada putaran berikutnya. Kerusakan performa tidak sekadar penjumlahan biasa, melainkan berlipat ganda secara non-linear.
+
+---
 
 ### 4.3 Uji Diskordansi Berpasangan McNemar (*McNemar's Paired Test*)
 Membandingkan sampel berpasangan antara Kondisi A (Kontrol) dan Kondisi C (Sikofansi):
-- **Nilai Chi-Square ($\chi^2$):** **16.20** ($p = 5.70 \times 10^{-5}$)
-- **Jumlah Kasus Terdegradasi (Benar $\to$ Salah):** 20 dari 48 kasus ($41.7\%$).
-- **Jumlah Kasus Membaik (Salah $\to$ Benar):** 1 dari 48 kasus ($2.1\%$).
+- **Nilai Chi-Square:** **16.20** (p = 0.000057)
+- **Jumlah Kasus Terdegradasi (Benar -> Salah):** 20 dari 48 kasus (41.7%).
+- **Jumlah Kasus Membaik (Salah -> Benar):** 1 dari 48 kasus (2.1%).
 
 ---
 
 ## 5. Galeri Visualisasi Standar Publikasi
 
-Seluruh grafik dihasilkan pada resolusi tinggi (300 DPI) di folder `output/figures/`:
+Seluruh grafik dihasilkan pada resolusi tinggi di folder `output/figures/`:
 
 1. **Gambar 1: Perbandingan Akurasi pada 4 Kondisi Eksperimen** (`01_condition_accuracy_comparison.png`)  
    Memperlihatkan penurunan akurasi dari 83.3% ke 18.8% dengan interval kepercayaan 95% Bootstrap.
@@ -145,28 +146,31 @@ Seluruh grafik dihasilkan pada resolusi tinggi (300 DPI) di folder `output/figur
 ```
 securelogic-eval/
 ├── app/
-│   └── dashboard.py               # Dasbor interaktif Streamlit (Gradasi Oranye-Merah)
+│   └── dashboard.py               # Dasbor interaktif Streamlit (Tema Sunset Crimson)
 ├── data/
 │   ├── benchmark_questions.json   # 48 butir soal matematika analitik terverifikasi
 │   ├── benchmark_questions.csv    # Dataset soal dalam format tabular
 │   ├── raw_eval_results.json      # Dataset mentah 192 sampel evaluasi multi-putaran
 │   └── raw_eval_results.csv       # Dataset tabular hasil evaluasi
 ├── docs/
-│   ├── INTERVIEW_TALKING_POINTS.md # Panduan presentasi portofolio & bedah CV
-│   ├── RESEARCH_REPORT.md         # Whitepaper akademik komprehensif
-│   └── SYSTEMATIC_COMPREHENSIVE_GUIDE.md # Naskah fondasi teoretis lengkap
+│   ├── DEPLOY_TO_SNOWFLAKE.md     # Panduan deployment Snowflake Workspaces
+│   ├── RESEARCH_REPORT.md         # Whitepaper akademik metodologi riset
+│   └── snowflake_analytics.sql   # Skrip query SQL analitik Snowflake
 ├── notebooks/
-│   ├── 01_securelogic_deep_dive.ipynb # Master Notebook portofolio interaktif
-│   └── build_notebook.py          # Pembangun master notebook otomatis
+│   └── 01_securelogic_deep_dive.ipynb # Master Notebook portofolio analitik
 ├── output/
-│   └── figures/                   # 5 grafik publikasi ilmiah (High-DPI)
+│   └── figures/                   # 5 grafik visualisasi riset publikasi
+├── snowflake/
+│   ├── environment.yml            # Konfigurasi dependensi Snowflake Conda
+│   └── streamlit_in_snowflake.py  # Aplikasi mandiri Streamlit in Snowflake
 ├── src/
 │   ├── analytics/                 # Mesin kalkulasi metrik, ANOVA, dan visualisasi
 │   ├── dataset/                   # Skema data Pydantic & generator 48 soal eksak
 │   └── evaluator/                 # Client Ollama/API, regex extractor, dan runner
 ├── tests/                         # 11 pengujian otomatis unit test (100% Passed)
 ├── run_eval.py                    # Skrip eksekusi cepat terminal
-└── requirements.txt               # Daftar dependensi Python
+├── requirements.txt               # Daftar dependensi Python
+└── README.md                      # Dokumentasi utama proyek
 ```
 
 ---
